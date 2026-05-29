@@ -2,6 +2,8 @@
 
 A free, open-source, bring-your-own-key LeetCode Premium alternative for company-wise interview prep. Browse company-tagged LeetCode questions (Google, Meta, Amazon, Microsoft, Apple, Netflix, Uber, and hundreds more), filter by how recently each problem was asked, track your progress locally, and connect your own Gemini, OpenAI, or Anthropic key for hints, approaches, tiered code solutions (brute, optimal, best), and next-problem picks.
 
+**Live at [leetdex.vercel.app](https://leetdex.vercel.app)**
+
 If you have ever searched for things like "LeetCode premium free", "company wise LeetCode questions", "Google interview LeetCode list", "Meta tagged problems", or "which LeetCode questions does Amazon ask" - this is for you.
 
 ## Why this exists
