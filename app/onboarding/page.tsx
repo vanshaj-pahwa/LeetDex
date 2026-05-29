@@ -58,7 +58,7 @@ export default function OnboardingPage() {
         className="flex items-center gap-3 px-6 md:px-8 py-5 md:py-6"
         style={{ borderBottom: "1px solid var(--color-border)" }}
       >
-        <Link href={isExisting ? "/" : "#"} className="flex items-center gap-2.5">
+        <Link href="/" className="flex items-center gap-2.5">
           <div
             className="w-2.5 h-2.5 rounded-full"
             style={{
@@ -73,19 +73,17 @@ export default function OnboardingPage() {
             LeetDex
           </span>
         </Link>
-        {isExisting && (
-          <Link
-            href="/"
-            className="ml-auto inline-flex items-center gap-1.5 text-[12.5px] font-medium px-3 py-1.5 rounded-md transition-colors"
-            style={{
-              color: "var(--color-text-2)",
-              background: "var(--color-surface)",
-              border: "1px solid var(--color-border-2)",
-            }}
-          >
-            <span style={{ fontFamily: "var(--font-mono)" }}>←</span> Back to app
-          </Link>
-        )}
+        <Link
+          href="/"
+          className="ml-auto inline-flex items-center gap-1.5 text-[12.5px] font-medium px-3 py-1.5 rounded-md transition-colors"
+          style={{
+            color: "var(--color-text-2)",
+            background: "var(--color-surface)",
+            border: "1px solid var(--color-border-2)",
+          }}
+        >
+          <span style={{ fontFamily: "var(--font-mono)" }}>←</span> Back to app
+        </Link>
       </header>
 
       <main className="max-w-[580px] mx-auto px-6 py-14 pb-20">
