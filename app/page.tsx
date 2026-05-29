@@ -16,6 +16,7 @@ import { DifficultyBadge, StatusGlyph } from "@/components/Primitives";
 import { TagInput } from "@/components/TagInput";
 import { MonthCalendar } from "@/components/MonthCalendar";
 import { DailyChallenge } from "@/components/DailyChallenge";
+import { StreakModal, motivationLine } from "@/components/StreakModal";
 import {
   pickNext,
   PROVIDER_META,
@@ -37,6 +38,8 @@ export default function HomePage() {
   useEffect(() => {
     setGreetingIdx(Math.floor(Math.random() * 7));
   }, []);
+
+  const [streakOpen, setStreakOpen] = useState(false);
 
   const name = useStore((s) => s.name);
   const attempts = useStore((s) => s.attempts);
@@ -304,13 +307,24 @@ export default function HomePage() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8 md:mb-10 fade-up">
-        <StatBlock label="Solved" value={stats.solved} sub={`of ${PROBLEMS.length}`} />
+        <StatBlock
+          label="Solved"
+          value={stats.solved}
+          sub={`of ${PROBLEMS.length}`}
+          href="/problems?status=solved"
+        />
         <StatBlock
           label="This week"
           value={weekSummary.countThisWeek}
           sub={`since ${weekSummary.weekStartLabel}`}
         />
-        <StatBlock label="Streak" value={streak} sub={streak === 1 ? "day" : "days"} accent />
+        <StatBlock
+          label="Streak"
+          value={streak}
+          sub={motivationLine(streak)}
+          accent
+          onClick={streak > 0 ? () => setStreakOpen(true) : undefined}
+        />
         <StatBlock
           label="AI provider"
           value={hasKey ? PROVIDER_META[activeProvider].label : "Not set"}
@@ -667,6 +681,14 @@ export default function HomePage() {
 
         </aside>
       </div>
+
+      {streakOpen && (
+        <StreakModal
+          streak={streak}
+          attempts={attempts}
+          onClose={() => setStreakOpen(false)}
+        />
+      )}
     </Shell>
   );
 }
@@ -913,6 +935,7 @@ function StatBlock({
   accent = false,
   mono = true,
   href,
+  onClick,
 }: {
   label: string;
   value: string | number;
@@ -920,6 +943,7 @@ function StatBlock({
   accent?: boolean;
   mono?: boolean;
   href?: string;
+  onClick?: () => void;
 }) {
   const body = (
     <>
@@ -959,6 +983,18 @@ function StatBlock({
       >
         {body}
       </Link>
+    );
+  }
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        className="block w-full text-left px-5 py-4 rounded-xl card-hover"
+        style={baseStyle}
+      >
+        {body}
+      </button>
     );
   }
   return (
