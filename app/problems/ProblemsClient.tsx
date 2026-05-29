@@ -230,7 +230,7 @@ export default function ProblemsClient() {
           border: "1px solid var(--color-border)",
         }}
       >
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3">
+        <div className="flex flex-col md:flex-row md:flex-wrap md:items-center gap-3 md:gap-x-6 md:gap-y-3 px-4 py-3">
           <FilterGroup label="Difficulty">
             <SegChip
               on={filters.difficulties.length === 0}
@@ -298,10 +298,10 @@ export default function ProblemsClient() {
             ))}
           </FilterGroup>
 
-          <div className="ml-auto flex items-center gap-2">
+          <div className="md:ml-auto flex items-center gap-2 shrink-0">
             <button
               onClick={() => setShowAdvanced((v) => !v)}
-              className="text-[12px] font-mono px-2.5 py-1 rounded-md transition-colors flex items-center gap-1.5"
+              className="text-[12px] font-mono px-2.5 py-1 rounded-md transition-colors flex items-center gap-1.5 shrink-0"
               style={{
                 color: showAdvanced ? "var(--color-accent)" : "var(--color-text-2)",
                 background: showAdvanced ? "var(--color-accent-soft)" : "var(--color-surface-2)",
@@ -514,16 +514,17 @@ function ProblemRow({
         onClick={toggleStatus}
         title={isSolved ? "Mark unsolved" : "Mark solved"}
         aria-label={isSolved ? "Mark unsolved" : "Mark solved"}
-        className="relative z-10 flex items-center justify-center rounded-full shrink-0"
-        style={{ width: 24, height: 24 }}
+        className="relative z-10 flex items-center justify-center rounded-full shrink-0 w-5 h-5 md:w-6 md:h-6"
       >
         <StatusGlyph status={status} />
       </button>
 
-      {/* Number (fixed width on desktop, smaller on mobile) */}
+      {/* Number: auto-width on mobile (sits flush after the tick, no dead
+          column space for short ids), fixed 40px right-aligned on desktop
+          for tabular alignment between rows. */}
       <div
-        className="font-mono text-[11.5px] md:text-[12px] tnum text-right pointer-events-none shrink-0"
-        style={{ color: "var(--color-dim)", width: 40, paddingRight: 4 }}
+        className="font-mono text-[11.5px] md:text-[12px] tnum pointer-events-none shrink-0 md:w-10 md:pr-1 md:text-right"
+        style={{ color: "var(--color-dim)" }}
       >
         {problem.leetcodeNumber}
       </div>
@@ -581,8 +582,8 @@ function ProblemRow({
         )}
       </div>
 
-      {/* Difficulty */}
-      <div className="flex justify-center pointer-events-none shrink-0" style={{ width: 70 }}>
+      {/* Difficulty: tight box on mobile (badge is smaller), 70px on desktop for column alignment */}
+      <div className="flex justify-center pointer-events-none shrink-0 w-auto md:w-[70px]">
         <DifficultyBadge value={problem.difficulty} />
       </div>
 
@@ -647,14 +648,14 @@ function FilterGroup({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-col md:flex-row md:items-center gap-1.5 md:gap-2 shrink-0">
       <span
         className="text-[10px] font-mono uppercase shrink-0"
         style={{ color: "var(--color-dim)", letterSpacing: "0.14em" }}
       >
         {label}
       </span>
-      <div className="flex items-center gap-1">{children}</div>
+      <div className="flex flex-wrap items-center gap-1">{children}</div>
     </div>
   );
 }
@@ -694,7 +695,7 @@ function SegChip({
       type="button"
       onClick={onClick}
       title={title}
-      className="px-2.5 py-1 rounded-md text-[12px] transition-colors font-medium"
+      className="px-2.5 py-1 rounded-md text-[12px] transition-colors font-medium shrink-0"
       style={{
         background: on ? toneBg : "transparent",
         color: on ? toneFg : "var(--color-text-2)",
@@ -707,9 +708,11 @@ function SegChip({
 }
 
 function Divider() {
+  // Vertical line between filter groups on desktop. Hidden on mobile where
+  // groups stack into a column.
   return (
     <span
-      className="self-stretch"
+      className="hidden md:block self-stretch"
       style={{ width: 1, background: "var(--color-border)" }}
       aria-hidden
     />

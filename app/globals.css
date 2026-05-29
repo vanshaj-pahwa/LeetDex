@@ -75,6 +75,10 @@ button:disabled { cursor: not-allowed !important; }
 ::-webkit-scrollbar-thumb { background: var(--color-border-2); border-radius: 999px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.18); }
 
+/* Hide scrollbars on horizontal-scroll filter rows (mobile filter bar). */
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }

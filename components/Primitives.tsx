@@ -12,15 +12,11 @@ export function DifficultyBadge({ value }: { value: Difficulty }) {
   const c = DIFF_COLOR[value];
   return (
     <span
+      className="rounded-full uppercase font-medium inline-block text-[9px] md:text-[10.5px] px-1.5 py-px md:px-[9px] md:py-[3px]"
       style={{
         background: c.bg,
         color: c.fg,
-        fontSize: 10.5,
-        padding: "3px 9px",
-        borderRadius: 999,
         letterSpacing: "0.06em",
-        textTransform: "uppercase",
-        fontWeight: 500,
       }}
     >
       {value}
