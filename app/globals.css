@@ -1,0 +1,533 @@
+@import "tailwindcss";
+
+/* ====================================================================
+   LeetDex · Aurora design system (amber)
+   ==================================================================== */
+
+@theme inline {
+  --color-bg:           #0D0D10;
+  --color-bg-warm:      #14110F;
+  --color-surface:      rgba(255, 255, 255, 0.025);
+  --color-surface-2:    rgba(255, 255, 255, 0.04);
+  --color-surface-3:    rgba(255, 255, 255, 0.06);
+  --color-border:       rgba(255, 255, 255, 0.06);
+  --color-border-2:     rgba(255, 255, 255, 0.10);
+  --color-border-hover: rgba(224, 164, 88, 0.22);
+
+  --color-text:         #ECEAE5;
+  --color-text-2:       #C4C2BC;
+  --color-dim:          #84848C;
+  --color-dimmer:       #56565E;
+
+  --color-accent:       #E0A458;
+  --color-accent-2:     #F2BC78;
+  --color-accent-soft:  rgba(224, 164, 88, 0.10);
+  --color-accent-glow:  rgba(224, 164, 88, 0.18);
+
+  --color-easy:         #7BC4A4;
+  --color-easy-soft:    rgba(123, 196, 164, 0.12);
+  --color-medium:       #E0A458;
+  --color-medium-soft:  rgba(224, 164, 88, 0.12);
+  --color-hard:         #E5604A;
+  --color-hard-soft:    rgba(229, 96, 74, 0.14);
+
+  --color-green:        #7BC4A4;
+  --color-green-soft:   rgba(123, 196, 164, 0.12);
+  --color-amber:        #E0A458;
+  --color-amber-soft:   rgba(224, 164, 88, 0.12);
+  --color-red:          #E5604A;
+  --color-red-soft:     rgba(229, 96, 74, 0.14);
+
+  --font-display: var(--font-bricolage), system-ui, sans-serif;
+  --font-sans:    var(--font-dm-sans), system-ui, sans-serif;
+  --font-mono:    var(--font-jetbrains), ui-monospace, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% -15%, rgba(224, 164, 88, 0.07), transparent 60%),
+    radial-gradient(ellipse 90% 50% at 100% 100%, rgba(91, 155, 150, 0.04), transparent 60%),
+    var(--color-bg);
+  background-attachment: fixed;
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.005em;
+}
+
+a { color: inherit; text-decoration: none; }
+
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer !important;
+}
+button:disabled { cursor: not-allowed !important; }
+
+.tnum { font-variant-numeric: tabular-nums; }
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-border-2); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.18); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp 600ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* Skeleton loader: pulsing bars used while waiting for AI responses.
+   Uses a shimmer gradient so the bars are visible on the surface card. */
+@keyframes skeletonShimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton-line {
+  border-radius: 4px;
+  height: 12px;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.04) 0%,
+      rgba(224, 164, 88, 0.18) 50%,
+      rgba(255, 255, 255, 0.04) 100%
+    );
+  background-size: 200% 100%;
+  animation: skeletonShimmer 1.6s linear infinite;
+}
+
+/* Subtle blinking cursor used at the tail of streaming text */
+@keyframes streamCursor {
+  0%, 50%  { opacity: 1; }
+  51%, 100%{ opacity: 0; }
+}
+.stream-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  background: var(--color-accent);
+  animation: streamCursor 900ms steps(2) infinite;
+}
+
+
+/* hint/explain prose - server-sanitized markdown turned into HTML */
+.prose-hint {
+  color: var(--color-text-2);
+  font-size: 14px;
+  line-height: 1.65;
+  letter-spacing: -0.003em;
+}
+.prose-hint p { margin: 0 0 0.9em; }
+.prose-hint p:last-child { margin-bottom: 0; }
+.prose-hint h1, .prose-hint h2, .prose-hint h3, .prose-hint h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--color-text);
+  letter-spacing: -0.015em;
+  margin: 1.4em 0 0.5em;
+  font-size: 15.5px;
+  line-height: 1.25;
+}
+.prose-hint h1:first-child,
+.prose-hint h2:first-child,
+.prose-hint h3:first-child { margin-top: 0; }
+.prose-hint strong, .prose-hint b { color: var(--color-text); font-weight: 600; }
+.prose-hint ul, .prose-hint ol {
+  margin: 0.5em 0 0.9em !important;
+  padding-left: 1.5em !important;
+  display: block;
+}
+.prose-hint ul { list-style-type: disc !important; list-style-position: outside !important; }
+.prose-hint ol { list-style-type: decimal !important; list-style-position: outside !important; }
+.prose-hint li { display: list-item !important; margin: 0.3em 0; line-height: 1.55; }
+.prose-hint li::marker { color: var(--color-accent); }
+.prose-hint code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--color-surface-2);
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: var(--color-text);
+}
+/* Code block: bar on top with language + copy, then the pre below. */
+.prose-hint .code-block {
+  margin: 0.9em 0;
+  border-radius: 8px;
+  border: 1px solid var(--color-border-2);
+  background: #0F0D0B;
+  overflow: hidden;
+}
+.prose-hint .code-block-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 10px 5px 12px;
+  background: rgba(255, 255, 255, 0.025);
+  border-bottom: 1px solid var(--color-border);
+}
+.prose-hint .code-block-lang {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-dim);
+}
+.prose-hint .code-block-copy {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: transparent;
+  border: 1px solid var(--color-border-2);
+  color: var(--color-text-2);
+  cursor: pointer;
+  transition: color 150ms ease, background 150ms ease, border-color 150ms ease;
+}
+.prose-hint .code-block-copy:hover {
+  color: var(--color-accent);
+  background: var(--color-accent-soft);
+  border-color: rgba(224, 164, 88, 0.3);
+}
+.prose-hint .code-block-copy.copied {
+  color: var(--color-green);
+  background: var(--color-green-soft);
+  border-color: rgba(123, 196, 164, 0.3);
+}
+.prose-hint pre {
+  background: transparent;
+  padding: 14px 16px;
+  border-radius: 0;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.65;
+  margin: 0;
+  border: 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-2) transparent;
+}
+.prose-hint pre::-webkit-scrollbar { height: 6px; }
+.prose-hint pre::-webkit-scrollbar-thumb { background: var(--color-border-2); border-radius: 999px; }
+.prose-hint pre code {
+  background: transparent;
+  padding: 0;
+  color: #D4D4D4;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  tab-size: 2;
+}
+
+/* VS Code Dark+ style token colors */
+.prose-hint .tok-kw  { color: #569CD6; }   /* keywords: blue */
+.prose-hint .tok-str { color: #CE9178; }   /* strings: orange-brown */
+.prose-hint .tok-com { color: #6A9955; font-style: italic; }  /* comments: green */
+.prose-hint .tok-num { color: #B5CEA8; }   /* numbers: light green */
+
+.prose-hint a {
+  color: var(--color-accent);
+  border-bottom: 1px solid rgba(224, 164, 88, 0.35);
+}
+.prose-hint a:hover { border-bottom-color: var(--color-accent); }
+.prose-hint blockquote {
+  border-left: 2px solid var(--color-accent);
+  padding-left: 12px;
+  margin: 0.75em 0;
+  color: var(--color-dim);
+  font-style: italic;
+}
+.prose-hint-table-wrap {
+  margin: 1em 0;
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid var(--color-border-2);
+  background: var(--color-bg-warm);
+}
+.prose-hint-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+.prose-hint-table th,
+.prose-hint-table td {
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: middle;
+}
+.prose-hint-table thead th {
+  color: var(--color-dim);
+  font-weight: 500;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--color-border-2);
+  padding-top: 9px;
+  padding-bottom: 9px;
+  line-height: 1.35;
+}
+.prose-hint-table tbody td {
+  color: var(--color-text);
+}
+.prose-hint-table tbody td:first-child {
+  font-weight: 500;
+  color: var(--color-text);
+}
+/* All non-first body cells use mono so short technical values like O(n)
+   line up cleanly and read as data rather than prose. */
+.prose-hint-table tbody td:not(:first-child) {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-text-2);
+}
+.prose-hint-table tbody tr + tr td {
+  border-top: 1px solid var(--color-border);
+}
+.prose-hint-table td code,
+.prose-hint-table th code {
+  font-size: 0.92em;
+  padding: 1px 5px;
+  background: var(--color-surface-2);
+}
+
+/* Horizontal rule (---) */
+.prose-hint hr {
+  border: 0;
+  border-top: 1px solid var(--color-border);
+  margin: 1.25em 0;
+}
+
+/* LeetCode problem-statement HTML (fetched live, rendered with
+   dangerouslySetInnerHTML after server-side sanitization). */
+.prose-statement {
+  color: var(--color-text-2);
+  font-size: 14px;
+  line-height: 1.65;
+  letter-spacing: -0.003em;
+}
+.prose-statement p { margin: 0 0 0.85em; }
+.prose-statement p:last-child { margin-bottom: 0; }
+.prose-statement strong, .prose-statement b { color: var(--color-text); font-weight: 600; }
+.prose-statement em, .prose-statement i { font-style: italic; }
+.prose-statement ul, .prose-statement ol {
+  margin: 0.5em 0 0.9em !important;
+  padding-left: 1.5em !important;
+  display: block;
+}
+.prose-statement ul { list-style-type: disc !important; list-style-position: outside !important; }
+.prose-statement ol { list-style-type: decimal !important; list-style-position: outside !important; }
+.prose-statement li { display: list-item !important; margin: 0.3em 0; }
+.prose-statement li::marker { color: var(--color-accent); }
+.prose-statement code {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  background: var(--color-surface-2);
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: var(--color-text);
+}
+.prose-statement pre {
+  background: var(--color-bg-warm);
+  padding: 12px 14px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  margin: 0.85em 0;
+  border: 1px solid var(--color-border);
+  white-space: pre-wrap;
+}
+.prose-statement pre code { background: transparent; padding: 0; }
+.prose-statement a {
+  color: var(--color-accent);
+  border-bottom: 1px solid rgba(224, 164, 88, 0.35);
+}
+.prose-statement a:hover { border-bottom-color: var(--color-accent); }
+.prose-statement img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin: 0.5em 0;
+  background: var(--color-surface-2);
+}
+.prose-statement h1, .prose-statement h2, .prose-statement h3, .prose-statement h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--color-text);
+  letter-spacing: -0.015em;
+  margin: 1.4em 0 0.5em;
+  font-size: 15px;
+  line-height: 1.25;
+}
+.prose-statement h1:first-child,
+.prose-statement h2:first-child,
+.prose-statement h3:first-child,
+.prose-statement h4:first-child { margin-top: 0; }
+.prose-statement sup { font-size: 0.72em; line-height: 0; position: relative; top: -0.45em; }
+.prose-statement sub { font-size: 0.72em; line-height: 0; position: relative; bottom: -0.25em; }
+
+/* Cap reading width so long paragraphs don't sprawl across wide screens. */
+.prose-statement { max-width: 72ch; }
+
+/* ── Example block — plain, no border, no chip ──────────────────────── */
+.prose-statement .ps-example {
+  margin: 1.5em 0;
+}
+.prose-statement .ps-example-num {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-dim);
+  margin-bottom: 6px;
+}
+.prose-statement .ps-example pre {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.75;
+  color: var(--color-text-2);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.prose-statement .ps-example p {
+  margin: 0 0 0.3em;
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+.prose-statement .ps-example p:last-child { margin-bottom: 0; }
+/* Input / Output / Explanation: plain bold inline labels, no color, no chip. */
+.prose-statement .ps-input,
+.prose-statement .ps-output,
+.prose-statement .ps-explanation {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+/* ── Constraints section ────────────────────────────────────────────── */
+.prose-statement .ps-section {
+  margin: 1.75em 0 0;
+  padding-top: 1.25em;
+  border-top: 1px dashed var(--color-border);
+}
+.prose-statement .ps-section-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-dim);
+  margin-bottom: 12px;
+}
+/* Constraints list: default disc bullets, mono for inequalities. */
+.prose-statement .ps-section ul {
+  margin: 0 !important;
+  padding-left: 1.4em !important;
+}
+.prose-statement .ps-section li {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.75;
+  color: var(--color-text-2);
+  margin: 0.15em 0 !important;
+}
+.prose-statement .ps-section li code {
+  background: transparent;
+  padding: 0;
+  font-size: 1em;
+  color: var(--color-text);
+}
+
+/* ── Follow-up — plain block, no callout box ────────────────────────── */
+.prose-statement .ps-followup {
+  margin: 1.75em 0 0;
+}
+.prose-statement .ps-followup > div:last-child {
+  color: var(--color-text-2);
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+/* Crisp superscripts for caret notation (O(n^2) becomes n with a small 2). */
+.prose-hint sup {
+  font-size: 0.72em;
+  line-height: 0;
+  position: relative;
+  top: -0.45em;
+  margin-left: 0.5px;
+}
+
+/* Time/Space complexity badge row, rendered in place of the plain
+   "Time: O(n^2) Space: O(1)" line that the Code prompt emits. */
+.prose-hint .complexity-row {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0.6em 0 0.9em;
+}
+.prose-hint .complexity-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+}
+.prose-hint .complexity-label {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-dim);
+}
+.prose-hint .complexity-value {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-accent);
+}
+.prose-hint .complexity-value sup {
+  color: inherit;
+}
+
+/* problem-card gradient-border hover (mask trick) */
+.card-hover {
+  position: relative;
+  transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1), background-color 200ms ease;
+}
+.card-hover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, var(--color-accent), transparent 60%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 200ms ease;
+  pointer-events: none;
+}
+.card-hover:hover {
+  transform: translateY(-1px);
+  background-color: var(--color-surface-2);
+}
+.card-hover:hover::before { opacity: 1; }
+
+/* progress heatmap cell */
+.heat-cell {
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+}
