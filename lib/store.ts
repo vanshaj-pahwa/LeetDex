@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import type { Attempt, Difficulty, Status } from "./schema";
+import type { Attempt, Difficulty, Status, StudyPlan } from "./schema";
 
 /* Per-problem edit override. Only the fields the EditProblemModal lets the
  * user change live here; the catalog stays the source for everything else.
@@ -43,6 +43,9 @@ type State = {
    * Empty by default; populated only when the user uses the Edit modal in
    * hosted builds (npm run dev edits go to the JSON file directly). */
   problemOverrides: Record<string, ProblemOverride>;
+
+  /** The user's active interview prep study plan. Exactly one at a time. */
+  activePlan?: StudyPlan;
 
   /** Companies the user is actively prepping for. Biases the AI Up-next pick
    * toward problems asked at these companies. Empty array = no preference. */
@@ -94,6 +97,9 @@ type State = {
 
   saveProblemOverride: (problemId: string, patch: ProblemOverride) => void;
   clearProblemOverride: (problemId: string) => void;
+
+  setActivePlan: (plan: StudyPlan | undefined) => void;
+  clearActivePlan: () => void;
 
   setCodeLanguage: (lang: string | undefined) => void;
 
@@ -191,6 +197,9 @@ export const useStore = create<State>()(
           return { problemOverrides: next };
         }),
 
+      setActivePlan: (plan) => set({ activePlan: plan }),
+      clearActivePlan: () => set({ activePlan: undefined }),
+
       setWeeklyDigest: (key, digest) =>
         set({
           weeklyDigestCacheKey: key,
@@ -233,6 +242,7 @@ export const useStore = create<State>()(
         activeProvider: s.activeProvider,
         attempts: s.attempts,
         problemOverrides: s.problemOverrides,
+        activePlan: s.activePlan,
         filters: s.filters,
         targetCompanies: s.targetCompanies,
         codeLanguage: s.codeLanguage,

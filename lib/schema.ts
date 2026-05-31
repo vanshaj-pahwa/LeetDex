@@ -55,6 +55,23 @@ export type Attempt = {
 
 export type CompanyEntry = { name: string; count: number };
 
+/* A single day's slot in an interview study plan: 2-3 problems the user
+ * is expected to work through that day. */
+export type StudyPlanSlot = {
+  date: string;          // YYYY-MM-DD
+  problemIds: string[];  // typically 2-3
+};
+
+/* The active interview study plan. One plan at a time keeps the UI and
+ * persistence model simple; regenerating replaces the previous plan. */
+export type StudyPlan = {
+  id: string;            // timestamp-based, just for React keys
+  company: string;
+  interviewDate: string; // YYYY-MM-DD
+  createdAt: string;     // ISO datetime
+  slots: StudyPlanSlot[];
+};
+
 export type Stats = {
   total: number;
   easy: number;

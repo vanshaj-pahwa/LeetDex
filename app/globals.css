@@ -79,6 +79,14 @@ button:disabled { cursor: not-allowed !important; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
 
+/* Ultra-narrow scrollbar for embedded scrolling cards (study plan schedule,
+ * etc.) so the gutter is barely visible. */
+.thin-scrollbar { scrollbar-width: thin; scrollbar-color: var(--color-border-2) transparent; }
+.thin-scrollbar::-webkit-scrollbar { width: 2px !important; height: 2px !important; }
+.thin-scrollbar::-webkit-scrollbar-track { background: transparent !important; }
+.thin-scrollbar::-webkit-scrollbar-thumb { background: var(--color-border-2) !important; border-radius: 999px !important; }
+.thin-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3) !important; }
+
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }

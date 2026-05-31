@@ -17,6 +17,7 @@ import { TagInput } from "@/components/TagInput";
 import { MonthCalendar } from "@/components/MonthCalendar";
 import { DailyChallenge } from "@/components/DailyChallenge";
 import { StreakModal, motivationLine } from "@/components/StreakModal";
+import { computePlanProgress, parseLocalDate } from "@/lib/studyPlan";
 import {
   pickNext,
   PROVIDER_META,
@@ -304,6 +305,10 @@ export default function HomePage() {
 
       {/* LeetCode daily challenge — fetched from LC's public GraphQL. */}
       <DailyChallenge />
+
+      {/* Interview prep snippet — only renders when the user has an active plan. */}
+      <PrepSnippet />
+
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8 md:mb-10 fade-up">
@@ -1001,6 +1006,109 @@ function StatBlock({
     <div className="px-5 py-4 rounded-xl" style={baseStyle}>
       {body}
     </div>
+  );
+}
+
+/* Compact home-page snippet that nudges the user toward today's slot in
+ * the active interview prep plan. Only renders when a plan exists.
+ * Returns null otherwise so first-time users see no clutter. */
+function PrepSnippet() {
+  const plan = useStore((s) => s.activePlan);
+  const attempts = useStore((s) => s.attempts);
+  if (!plan) return null;
+
+  const progress = computePlanProgress(plan, attempts);
+  const todayCount = progress.todaySlot?.problemIds.length ?? 0;
+  const todaySolved = (progress.todaySlot?.problemIds ?? []).filter(
+    (id) => attempts[id]?.status === "solved",
+  ).length;
+
+  const headline =
+    todayCount === 0
+      ? progress.overdueProblemIds.length > 0
+        ? `${progress.overdueProblemIds.length} to catch up on`
+        : "Plan window is over"
+      : todaySolved === todayCount
+        ? `Today done · ${todayCount}/${todayCount}`
+        : `${todaySolved}/${todayCount} today`;
+
+  return (
+    <Link
+      href="/prep"
+      className="block rounded-xl mb-7 px-4 sm:px-5 py-4 fade-up card-hover"
+      style={{
+        background: "var(--color-surface)",
+        border: "1px solid var(--color-border)",
+      }}
+    >
+      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+        <div
+          className="flex flex-col items-center justify-center shrink-0 rounded-lg"
+          style={{
+            width: 46,
+            height: 50,
+            background: "var(--color-bg-warm)",
+            border: "1px solid var(--color-border-2)",
+          }}
+        >
+          <div
+            className="font-mono text-[9px]"
+            style={{
+              color: "var(--color-accent)",
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              lineHeight: 1,
+              marginTop: 4,
+            }}
+          >
+            {progress.daysRemaining === 0 ? "Now" : "Days"}
+          </div>
+          <div
+            className="font-display font-semibold tnum"
+            style={{
+              fontSize: 22,
+              lineHeight: 1.1,
+              color: "var(--color-text)",
+              letterSpacing: "-0.02em",
+              marginTop: 2,
+            }}
+          >
+            {progress.daysRemaining}
+          </div>
+        </div>
+
+        <div className="min-w-0 flex-1">
+          <div
+            className="font-mono text-[10px] uppercase mb-1"
+            style={{ color: "var(--color-dim)", letterSpacing: "0.14em" }}
+          >
+            Interview prep · {plan.company}
+          </div>
+          <div
+            className="font-display font-medium text-[14.5px]"
+            style={{ letterSpacing: "-0.01em" }}
+          >
+            {headline}
+          </div>
+          <div
+            className="text-[11.5px] mt-0.5"
+            style={{ color: "var(--color-dimmer)" }}
+          >
+            Interview on {parseLocalDate(plan.interviewDate).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+            {progress.overdueProblemIds.length > 0 && todayCount > 0
+              ? ` · ${progress.overdueProblemIds.length} overdue`
+              : ""}
+          </div>
+        </div>
+
+        <div
+          className="shrink-0 self-start sm:self-auto px-3 py-1.5 rounded-md text-[12px] font-medium"
+          style={{ background: "var(--color-accent)", color: "#1A0F08" }}
+        >
+          Open plan →
+        </div>
+      </div>
+    </Link>
   );
 }
 

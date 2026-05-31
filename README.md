@@ -12,6 +12,8 @@ LeetCode Premium gates the most useful information behind a paywall: which probl
 
 Pick Amazon and the Last 30 Days filter, and the list narrows from 800 historical questions to the dozen they are actually asking this month.
 
+Or skip the filtering: pick a target company plus an interview date, and Interview prep builds a day-by-day study plan, ramped easy to hard, that reacts to your solves and lets you switch target without losing progress.
+
 Everything runs in your browser. No account, no server, no tracking. Bring your own AI key if you want the smart picks; the rest works offline.
 
 ## Features
@@ -20,6 +22,7 @@ Everything runs in your browser. No account, no server, no tracking. Bring your 
 
 - **Company-tagged problem list.** LeetCode problems mapped to the companies that asked them, with per-company recency so you can prioritize "asked in the last 30 days at Meta" over five-year-old questions.
 - **Filter and search.** By difficulty, topic, company, recency window, solved status, or full-text.
+- **Interview prep plans.** Pick a target company and an interview date, get a day-by-day plan of unsolved problems pulled from that company's recent questions, ramped easy to hard. Switch target or reset anytime without losing your solves.
 - **Real problem statements.** The full LeetCode statement is fetched on demand, so you do not need to context-switch to leetcode.com to start solving.
 - **Local solve tracking.** Mark problems solved, add notes, see a monthly activity calendar and current streak. Stored in `localStorage`, no account needed.
 - **LeetCode daily challenge.** Pulled live and shown on the home page.

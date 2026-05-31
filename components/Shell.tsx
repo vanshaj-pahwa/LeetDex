@@ -252,6 +252,7 @@ function Sidebar({
 
       <GroupLabel>Practice</GroupLabel>
       <nav className="flex flex-col gap-px">
+        <NavLink href="/prep" label="Interview prep" on={isActive("/prep")} />
         <NavLink href="/problems?status=solved" label="Solved" on={solvedOn} count={solved} />
       </nav>
 
