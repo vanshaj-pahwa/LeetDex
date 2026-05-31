@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { createContext, Suspense, useContext, useEffect, useRef, useState } from "react";
 import { useStore } from "@/lib/store";
 import { COMPANIES, PROBLEMS, STATS } from "@/lib/catalog";
@@ -384,7 +384,28 @@ export function Topbar({
   const inputRef = useRef<HTMLInputElement>(null);
   const { openDrawer } = useContext(ShellContext);
   const pathname = usePathname();
+  const router = useRouter();
   const showBack = pathname !== "/";
+
+  // If the host page didn't wire up onChange (e.g. Home, Prep, Topics),
+  // fall back to a local-state input that navigates to /problems on Enter.
+  const isControlled = value !== undefined && onChange !== undefined;
+  const [localValue, setLocalValue] = useState("");
+  const inputValue = isControlled ? value : localValue;
+  const handleChange = (v: string) => {
+    if (isControlled) onChange?.(v);
+    else setLocalValue(v);
+  };
+  const handleKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (isControlled) return; // /problems wires its own filter; no nav needed.
+    if (e.key === "Enter") {
+      const q = localValue.trim();
+      if (!q) return;
+      router.push(`/problems?search=${encodeURIComponent(q)}`);
+      setLocalValue("");
+      inputRef.current?.blur();
+    }
+  };
 
   // "/" anywhere on the page focuses the search box, unless the user is
   // already typing in another input/textarea/contenteditable.
@@ -466,8 +487,9 @@ export function Topbar({
           className="flex-1 min-w-0 bg-transparent border-none outline-none text-[13px]"
           style={{ color: "var(--color-text)" }}
           placeholder={searchPlaceholder}
-          value={value ?? ""}
-          onChange={(e) => onChange?.(e.target.value)}
+          value={inputValue}
+          onChange={(e) => handleChange(e.target.value)}
+          onKeyDown={handleKey}
         />
         <kbd
           className="hidden md:inline-block font-mono text-[11px] px-1.5 py-px rounded"
